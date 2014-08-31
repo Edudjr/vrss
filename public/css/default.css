@@ -1,0 +1,9 @@
+#item{
+	width: 342px;
+	float:left;
+}
+
+#content{
+
+	-webkit-line-clamp: 2;
+}
