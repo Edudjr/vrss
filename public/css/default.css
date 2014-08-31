@@ -1,9 +1,15 @@
 #item{
 	width: 342px;
 	float:left;
+	margin: 10px 10px;
+	height: 600px;
 }
 
 #content{
+	overflow: hidden;
+	height: 225px;
+}
 
-	-webkit-line-clamp: 2;
+#title{
+	height: 80px;
 }
