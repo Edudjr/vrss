@@ -42,8 +42,13 @@
 			var content = String(str).replace(/<img.*>/i,"");
 			var img = str.match(regex);
 			var img_resized = String(img).replace(">", "style=\"width: 300px;\">");
+			var continue_reading = new RegExp(/<a href.*?>Continue.*?<\/a>/i);
+			continue_reading.test(str);
+			var footer = RegExp.lastMatch;
+			//console.log("Match found: " + footer);
+			
 			//console.log("found: "+str);
-
+			
 			//console.log("------------------------");
 			//console.log("title      : " + e.title);
 			//console.log("author     : " + e.author);
@@ -57,9 +62,12 @@
 												+"<div id=\"image\" class=\"img-thumbnail\">"
 													+img_resized
 												+"</div>"
-												+"<div id=\"content\" style=\"padding: 10px 5px;text-align: justify;\">"
+												+"<div id=\"content\">"
 													+content
-												+"</div>" 
+												+"</div>"
+												+"<div id=\"item_footer\">"
+													+footer
+												+"</div>"
 											+"</div>"
 										+"</div>");
 		  })
