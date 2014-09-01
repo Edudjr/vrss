@@ -4,6 +4,7 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+var request = require('request');
 
 var routes = require('./routes/index');
 var users = require('./routes/users');
@@ -34,10 +35,36 @@ app.use(function(req, res, next) {
     next(err);
 });
 
-
-
 module.exports = app;
 
+
+//URL for website feed
+var FEED_URL="http://www.theverge.com/rss/index.xml";
+
+//request feed
+request(
+    { 	method: 'GET',
+		url: 'http://ajax.googleapis.com/ajax/services/feed/load?v=1.0&num=9&q='+ encodeURIComponent(FEED_URL),  //google feed API + website feed 
+		dataType : 'json'
+	},
+	function (error, response, body) {
+		if (!error && response.statusCode == 200) {
+			
+			//parse the json string to a json object		
+			var json = JSON.parse(body);
+			
+			//Just printing some result
+			var json_final = json.responseData.feed.entries[0];
+			var jsonPretty = JSON.stringify(json_final); 
+			console.log("json: "+jsonPretty);
+		}
+});
+
+function myjsonfunction(data){
+	   console.log(data.responseData.results) ;//showing results data
+  }
+
+	  
 app.listen(app.get('port'), function(){
   console.log('Express server listening on port ' + app.get('port'));
 });

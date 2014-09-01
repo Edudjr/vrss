@@ -32,7 +32,7 @@
 	var FEED_URL = "http://www.theverge.com/rss/index.xml";
 
 	$.ajax({
-	  url      : document.location.protocol + '//ajax.googleapis.com/ajax/services/feed/load?v=1.0&num=10&callback=?&q=' + encodeURIComponent(FEED_URL),
+	  url      : document.location.protocol + '//ajax.googleapis.com/ajax/services/feed/load?v=1.0&num=9&callback=?&q=' + encodeURIComponent(FEED_URL),
 	  dataType : 'json',
 	  success  : function (data) {
 		if (data.responseData.feed && data.responseData.feed.entries) {
