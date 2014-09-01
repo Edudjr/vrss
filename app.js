@@ -5,6 +5,7 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var request = require('request');
+var FeedParser = require('feedparser');
 
 var routes = require('./routes/index');
 var users = require('./routes/users');
@@ -37,6 +38,37 @@ app.use(function(req, res, next) {
 
 module.exports = app;
 
+//FEEDPARSER SCRIPT
+var req = request('http://www.theverge.com/rss/index.xml')
+	,  feedparser = new FeedParser();
+	
+req.on('error', function (error) {
+  // handle any request errors
+});
+
+req.on('response', function (res) {
+  var stream = this;
+
+  if (res.statusCode != 200) return this.emit('error', new Error('Bad status code'));
+
+  stream.pipe(feedparser);
+});
+
+
+feedparser.on('error', function(error) {
+  // always handle errors
+});
+feedparser.on('readable', function() {
+  // This is where the action is!
+  var stream = this
+    , meta = this.meta // **NOTE** the "meta" is always available in the context of the feedparser instance
+    , item;
+
+  while (item = stream.read()) {
+    console.log(item.title);
+  }
+});
+
 
 //URL for website feed
 var FEED_URL="http://www.theverge.com/rss/index.xml";
@@ -56,7 +88,7 @@ request(
 			//Just printing some result
 			var json_final = json.responseData.feed.entries[0];
 			var jsonPretty = JSON.stringify(json_final); 
-			console.log("json: "+jsonPretty);
+			//console.log("json: "+jsonPretty);
 		}
 });
 
