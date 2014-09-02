@@ -44,7 +44,7 @@ var data_feed = {
 			};
 			
 feedr.retrieve(data_feed, function(data){
-	console.log(data.items.length);
+	console.log(data.items[0].title);
 });
 //feedr.subscribe("http://push-pub.appspot.com/feed ");
 //feedr.unsubscribe("http://push-pub.appspot.com/feed ");

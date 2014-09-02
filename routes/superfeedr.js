@@ -29,7 +29,7 @@ exports.retrieve = function(feed, callback){
 			if (!error && response.statusCode == 200) {
 				//parse the json string to a json object		
 				var json = JSON.parse(body);
-				console.log(json.items[0].title);
+				//console.log(json.items[0].title);
 				callback(json);		
 			}
 	});

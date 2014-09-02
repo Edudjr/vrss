@@ -16,10 +16,14 @@ router.get('/live',function(req, res){
 });
 
 router.post('/live',function(req, res){
-	var json = feedr.retrieve("http://www.theverge.com/rss/index.xml");
-	console.log("live post:");
-	console.log(json);
-	res.send(json);
+	var send = {
+		url:"http://www.theverge.com/rss/index.xml",
+		count:9
+	};
+	
+	feedr.retrieve(send, function(data){
+		res.send(data);
+	});
 });
 
 router.post('/callback',function(req, res){

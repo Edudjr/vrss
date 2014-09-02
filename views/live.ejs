@@ -32,54 +32,47 @@
 	var FEED_URL = "http://www.theverge.com/rss/index.xml";
 	
 	$.post( "/live", function(data){
-		console.log("live data: ");
-		console.log(data);
+		//console.log("live data: ");
+		run(data);
 	});
 	
-	function run(){
-		$.ajax({
-		  url      : document.location.protocol + '//ajax.googleapis.com/ajax/services/feed/load?v=1.0&num=9&callback=?&q=' + encodeURIComponent(FEED_URL),
-		  dataType : 'json',
-		  success  : function (data) {
-			if (data.responseData.feed && data.responseData.feed.entries) {
-			  $.each(data.responseData.feed.entries, function (i, e) {
-				var str = e.content;
-				var regex = /<img.*>/i;
-				var content = String(str).replace(/<img.*>/i,"");
-				var img = str.match(regex);
-				var img_resized = String(img).replace(">", "style=\"width: 300px;\">");
-				var continue_reading = new RegExp(/<a href.*?>Continue.*?<\/a>/i);
-				continue_reading.test(str);
-				var footer = RegExp.lastMatch;
-				//console.log("Match found: " + footer);
-				
-				//console.log("found: "+str);
-				
-				//console.log("------------------------");
-				//console.log("title      : " + e.title);
-				//console.log("author     : " + e.author);
-				//console.log("description: " + e.content);
-				//$('#start').append("<br>---------------------------<h3>"+e.title+"</h3><br><p>"+e.content+"</p>");
-				$('#start').append("<div id=\"item\" class=\"panel panel-default\">"
-												+"<div id=\"panelwrapper\" class=\"panel-body\">"
-													+"<div id=\"title\">"
-														+"<h3>"+e.title+"</h3><br>"
-													+"</div>"
-													+"<div id=\"image\" class=\"img-thumbnail\">"
-														+img_resized
-													+"</div>"
-													+"<div id=\"content\">"
-														+content
-													+"</div>"
-													+"<div id=\"item_footer\">"
-														+footer
-													+"</div>"
+	function run(data){
+		$.each(data.items, function (i, e) {
+			var str = e.content;
+			var regex = /<img.*>/i;
+			var content = String(str).replace(/<img.*>/i,"");
+			var img = str.match(regex);
+			var img_resized = String(img).replace(">", "style=\"width: 300px;\">");
+			var continue_reading = new RegExp(/<a href.*?>Continue.*?<\/a>/i);
+			continue_reading.test(str);
+			var footer = RegExp.lastMatch;
+			//console.log("Match found: " + footer);
+
+			//console.log("found: "+str);
+
+			//console.log("------------------------");
+			//console.log("title      : " + e.title);
+			//console.log("author     : " + e.author);
+			//console.log("description: " + e.content);
+			//$('#start').append("<br>---------------------------<h3>"+e.title+"</h3><br><p>"+e.content+"</p>");
+			$('#start').append("<div id=\"item\" class=\"panel panel-default\">"
+											+"<div id=\"panelwrapper\" class=\"panel-body\">"
+												+"<div id=\"title\">"
+													+"<h3>"+e.title+"</h3><br>"
 												+"</div>"
-											+"</div>");
-			  })
-			}
-		  }
-		});
+												+"<div id=\"image\" class=\"img-thumbnail\">"
+													+img_resized
+												+"</div>"
+												+"<div id=\"content\">"
+													+content
+												+"</div>"
+												+"<div id=\"item_footer\">"
+													+footer
+												+"</div>"
+											+"</div>"
+										+"</div>"
+			);
+		})
 	}
 
 </script>
