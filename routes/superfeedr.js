@@ -1,15 +1,18 @@
 var request = require('request');
 
-var FEED_URL;
+var FEED_URL="http://www.theverge.com/rss/index.xml";
 var login = "edudjr";
 var token = "3eecd0c8ea5efc3c0c36809507dfa152";
 var URL= "https://"+login+":"+token+"@push.superfeedr.com";
 var send_data;
 var callback_url;
 
+//http://push-pub.appspot.com/feed  <-- debug link
+
+
 //Retrieving Entries with PubSubHubbub
-exports.retrieve = function(){
-	FEED_URL="http://www.theverge.com/rss/index.xml";
+exports.retrieve = function(feed){
+	FEED_URL=feed;
 
 	send_data =	"?hub.mode=retrieve" 
 							+"&hub.topic=" + FEED_URL
@@ -31,9 +34,9 @@ exports.retrieve = function(){
 }
 
 //Subscribing to feeds
-exports.subscribe= function(){
+exports.subscribe= function(feed){
 	callback_url = "https://edudjr.ngrok.com/callback";
-	FEED_URL = "http://push-pub.appspot.com/feed";
+	FEED_URL = feed;
 
 	send_data = "?hub.mode=subscribe"
 							+"&hub.topic="+FEED_URL
@@ -47,6 +50,25 @@ exports.subscribe= function(){
 		function(error, response, body){
 			if (!error && response.statusCode == 204) {
 				console.log("Successfuly subscribed");
+			}
+	});
+}
+
+//Unsubscribing to feeds
+exports.unsubscribe= function(feed){
+	FEED_URL = feed;
+
+	send_data = "?hub.mode=unsubscribe"
+							+"&hub.topic="+FEED_URL;
+							
+	request(
+		{	
+			method: 'POST',
+			url: URL + send_data
+		},
+		function(error, response, body){
+			if (!error && response.statusCode == 204) {
+				console.log("Successfuly unsubscribed");
 			}
 	});
 }

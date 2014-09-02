@@ -38,13 +38,9 @@ app.use(function(req, res, next) {
 
 module.exports = app;
 
-feedr.subscribe();
-feedr.retrieve();
-
-function myjsonfunction(data){
-	   console.log(data.responseData.results) ;//showing results data
-  }
-
+//superfeed test functions
+feedr.retrieve("http://www.theverge.com/rss/index.xml");
+feedr.unsubscribe("http://push-pub.appspot.com/feed ");
 	  
 app.listen(app.get('port'), function(){
   console.log('Express server listening on port ' + app.get('port'));
