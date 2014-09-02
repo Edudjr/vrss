@@ -3,6 +3,11 @@ var feedr = require('./superfeedr');
 var router = express.Router();
 var last_item;
 
+feedr.retrieve({url:"http://www.theverge.com/rss/index.xml"},function(data){
+	last_item=data.items[0].title;
+});
+
+
 /* GET home page. */
 router.get('/', function(req, res) {
   res.render('index.ejs', { title: 'Express' });
@@ -23,9 +28,6 @@ router.post('/live',function(req, res){
 	};
 	
 	feedr.retrieve(send, function(data){
-		last_item = data.items[0].title;
-		console.log("last item: ");
-		console.log(last_item);
 		res.send(data);
 	});
 });
