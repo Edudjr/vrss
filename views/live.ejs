@@ -17,12 +17,19 @@
 			<div class="container">
 				<div class="row clearfix">
 					<div class="col-md-12 column" style="margin-top: 30px">
+						<h1>Rss Model</h1>
+						<div class="jumbotron">
+								<p>This RSS reader is running on the server side. 
+								You DON'T need to reload the page to get new content. 
+								It will be refreshed every 10 seconds. If you wanna go faster, click on LOAD.</p>
+								<button id="load" type="button" class="btn btn-primary btn-lg">Load</button>
+							</div>
+						
 						<div id="start">
-							
-							<h1>Rss Model</h1>
 							<!-- ITEMS-->
 							
 						</div>
+						
 					</div>
 				</div>
 			</div>
@@ -35,6 +42,50 @@
 		//console.log("live data: ");
 		run(data);
 	});
+	setInterval('verify_news()', 8000);
+	
+	$('#load').click(verify_news);
+	
+	function verify_news(){
+		$.ajax({
+		  url: "/load",
+		  type: "POST",
+		  cache: false
+		})
+		.done(function( data ) {
+			if(data==='err')
+				return console.log("no news");
+			var str = data.content;
+			var regex = /<img.*>/i;
+			var content = String(str).replace(/<img.*>/i,"");
+			var img = str.match(regex);
+			var img_resized = String(img).replace(">", "style=\"width: 300px;\">");
+			var continue_reading = new RegExp(/<a href.*?>Continue.*?<\/a>/i);
+			continue_reading.test(str);
+			var footer = RegExp.lastMatch;
+			$('#start').prepend("<div id=\"item\" class=\"panel panel-default\">"
+											+"<div id=\"panelwrapper\" class=\"panel-body\">"
+												+"<div id=\"title\">"
+													+"<h3>"+data.title+"</h3><br>"
+												+"</div>"
+												+"<div id=\"image\" class=\"img-thumbnail\">"
+													+img_resized
+												+"</div>"
+												+"<div id=\"content\">"
+													+content
+												+"</div>"
+												+"<div id=\"item_footer\">"
+													+footer
+												+"</div>"
+											+"</div>"
+										+"</div>"
+			);
+			$("#item:last-child").remove();
+		});
+		
+		return false; 
+	}
+	
 	
 	function run(data){
 		$.each(data.items, function (i, e) {
