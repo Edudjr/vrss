@@ -8,6 +8,7 @@ var request = require('request');
 
 var routes = require('./routes/index');
 var users = require('./routes/users');
+var feedr = require('./routes/superfeedr');
 
 var app = express();
 
@@ -37,32 +38,8 @@ app.use(function(req, res, next) {
 
 module.exports = app;
 
-
-//URL for website feed
-var FEED_URL="http://www.theverge.com/rss/index.xml";
-var login = "edudjr";
-var token = "3eecd0c8ea5efc3c0c36809507dfa152";
-var URL= "https://"+login+":"+token+"@push.superfeedr.com";
-
-var send_data =	"?hub.mode=retrieve" 
-								+"&hub.topic=" + FEED_URL
-								+"&format=json"
-								+"&count=1";
-
-//Retrieving Entries with PubSubHubbub
-request(
-    { 	method: 'GET',
-		url: URL+send_data,
-		dataType : 'json'
-	},
-	function (error, response, body) {
-		if (!error && response.statusCode == 200) {
-			//parse the json string to a json object		
-			var json = JSON.parse(body);
-			console.log(json.items[0].title);
-			
-		}
-});
+feedr.subscribe();
+feedr.retrieve();
 
 function myjsonfunction(data){
 	   console.log(data.responseData.results) ;//showing results data
