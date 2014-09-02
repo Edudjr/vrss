@@ -10,4 +10,9 @@ router.get('/model',function(req, res){
 	res.render('model.ejs',{ title: 'Model' });
 });
 
+router.post('/callback',function(req, res){
+	console.log("body here: ");
+	console.log(req.body);
+});
+
 module.exports = router;

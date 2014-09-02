@@ -40,23 +40,27 @@ module.exports = app;
 
 //URL for website feed
 var FEED_URL="http://www.theverge.com/rss/index.xml";
+var login = "edudjr";
+var token = "3eecd0c8ea5efc3c0c36809507dfa152";
+var URL= "https://"+login+":"+token+"@push.superfeedr.com";
 
-//request feed
+var send_data =	"?hub.mode=retrieve" 
+								+"&hub.topic=" + FEED_URL
+								+"&format=json"
+								+"&count=1";
+
+//Retrieving Entries with PubSubHubbub
 request(
     { 	method: 'GET',
-		url: 'http://ajax.googleapis.com/ajax/services/feed/load?v=1.0&num=9&q='+ encodeURIComponent(FEED_URL),  //google feed API + website feed 
+		url: URL+send_data,
 		dataType : 'json'
 	},
 	function (error, response, body) {
 		if (!error && response.statusCode == 200) {
-			
 			//parse the json string to a json object		
 			var json = JSON.parse(body);
+			console.log(json.items[0].title);
 			
-			//Just printing some result
-			var json_final = json.responseData.feed.entries[0];
-			var jsonPretty = JSON.stringify(json_final); 
-			console.log("json: "+jsonPretty);
 		}
 });
 
