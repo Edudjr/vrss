@@ -11,13 +11,14 @@ var callback_url;
 
 
 //Retrieving Entries with PubSubHubbub
-exports.retrieve = function(feed){
-	FEED_URL=feed;
+exports.retrieve = function(feed, callback){
+	var url = feed.url;
+	var count = feed.count || 1;
 
 	send_data =	"?hub.mode=retrieve" 
-							+"&hub.topic=" + FEED_URL
+							+"&hub.topic=" + url
 							+"&format=json"
-							+"&count=1";
+							+"&count="+count;
 									
 	request(
 		{ 	
@@ -29,6 +30,7 @@ exports.retrieve = function(feed){
 				//parse the json string to a json object		
 				var json = JSON.parse(body);
 				console.log(json.items[0].title);
+				callback(json);		
 			}
 	});
 }
