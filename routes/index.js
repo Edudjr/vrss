@@ -32,20 +32,24 @@ router.post('/live',function(req, res){
 	});
 });
 
-router.post('/load',function(req, res){
+router.get('/load',function(req, res){
 	var send = {
 		url:"http://www.theverge.com/rss/index.xml",
 		count:1
 	};
 	
 	feedr.retrieve(send, function(data){
+		console.log("Current item: ");
 		console.log(data.items[0].title);
+		console.log("last saved item: ");
 		console.log(last_item);
-		console.log(data.items[0].title===last_item)
-		if(data.items[0].title===last_item)
-			res.send("err");
-		else
-			data.items[0].title;
+		if(data.items[0].title===last_item){
+			//res.send(data.items[0]);
+			res.status(304).end();
+		}else{
+			last_item = data.items[0].title;
+			res.send(data.items[0]);
+		}
 	});
 });
 
@@ -53,5 +57,18 @@ router.post('/callback',function(req, res){
 	console.log("body here: ");
 	console.log(req.body);
 });
+
+//GAME REQUESTS
+router.get('/getverge',function(req, res){
+	var send = {
+		url:"http://www.theverge.com/rss/index.xml",
+		count:10
+	};
+	
+	feedr.retrieve(send, function(data){
+		res.send(data);
+	});
+});
+
 
 module.exports = router;
